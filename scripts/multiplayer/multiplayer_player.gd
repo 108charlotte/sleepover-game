@@ -21,6 +21,9 @@ func _ready() -> void:
 		player_id,
 		is_multiplayer_authority()
 	])
+	var camera = get_node_or_null("Camera2D")
+	if camera:
+		camera.enabled = is_multiplayer_authority()
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
