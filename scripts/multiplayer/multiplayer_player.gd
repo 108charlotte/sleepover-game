@@ -1,19 +1,18 @@
 extends CharacterBody2D
-
-const GRID_SIZE = 128  # Size of each grid cell in pixels
-const MOVE_SPEED = 0  # Seconds to tween between cells (lower = faster)
-
+const GRID_SIZE = 128
+const MOVE_SPEED = 0
+@onready var animated_sprite = $AnimatedSprite2D
 @export var player_id := 1:
 	set(id):
 		player_id = id
-		set_multiplayer_authority(id)
-
-var _is_moving := false
 var _target_position := Vector2.ZERO
+var _last_direction := Vector2.DOWN  # track for idle animation
+
+func _enter_tree() -> void:
+	player_id = int(name)
+	set_multiplayer_authority(int(name))
 
 func _ready() -> void:
-	player_id = int(name)
-	# Snap to grid on start
 	position = position.snapped(Vector2(GRID_SIZE, GRID_SIZE))
 	_target_position = position
 	print("My peer ID: %s | This player's ID: %s | Am I authority: %s" % [
@@ -27,12 +26,12 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
+		position = position.move_toward(_target_position, GRID_SIZE)  # smooth follow
 		return
-	if _is_moving:
-		return
+	_apply_movement_from_input()
 
+func _apply_movement_from_input() -> void:
 	var direction := Vector2.ZERO
-
 	if Input.is_action_just_pressed("ui_left"):
 		direction = Vector2.LEFT
 	elif Input.is_action_just_pressed("ui_right"):
@@ -47,18 +46,34 @@ func _physics_process(delta: float) -> void:
 
 func _move(direction: Vector2) -> void:
 	var next_position = _target_position + direction * GRID_SIZE
-
-	# Optional: collision check before moving
 	var space = get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(position, next_position)
 	query.exclude = [self]
 	var result = space.intersect_ray(query)
 	if result:
-		return  # Blocked, don't move
-
+		return
+	_last_direction = direction
 	_target_position = next_position
-	_is_moving = true
+	position = _target_position  # ← this was missing
+	_play_walk_animation()
+	_play_idle_animation()  # ← also add this back begins
 
-	var tween = create_tween()
-	tween.tween_property(self, "position", _target_position, MOVE_SPEED)
-	tween.tween_callback(func(): _is_moving = false)
+func _play_walk_animation() -> void:
+	if _last_direction == Vector2.LEFT:
+		animated_sprite.play("walk_left")
+	elif _last_direction == Vector2.RIGHT:
+		animated_sprite.play("walk_right")
+	elif _last_direction == Vector2.UP:
+		animated_sprite.play("walk_up")
+	elif _last_direction == Vector2.DOWN:
+		animated_sprite.play("walk_down")
+
+func _play_idle_animation() -> void:
+	if _last_direction == Vector2.LEFT:
+		animated_sprite.play("idle_left")
+	elif _last_direction == Vector2.RIGHT:
+		animated_sprite.play("idle_right")
+	elif _last_direction == Vector2.UP:
+		animated_sprite.play("idle_up")
+	elif _last_direction == Vector2.DOWN:
+		animated_sprite.play("idle_down")
