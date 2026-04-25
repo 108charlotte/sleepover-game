@@ -1,5 +1,15 @@
 [gd_scene format=3 uid="uid://b1wfakwo8cmf5"]
 
+[ext_resource type="PackedScene" uid="uid://7alj3l2ds1x2" path="res://map.tscn" id="1_pq8q7"]
+[ext_resource type="Script" uid="uid://dmisuj0c71rhg" path="res://rooms.gd" id="3_vvh5c"]
+
+[sub_resource type="Gradient" id="Gradient_ajl2i"]
+offsets = PackedFloat32Array(0, 0.0055555557, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.90555555, 0.90555555, 0.90555555, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pyidc"]
+gradient = SubResource("Gradient_ajl2i")
+
 [node name="Root" type="Control" unique_id=1795883327]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +17,59 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_vvh5c")
+
+[node name="gridworld" parent="." unique_id=1810495705 instance=ExtResource("1_pq8q7")]
+unique_name_in_owner = true
+
+[node name="MultiplayerHUD" type="Control" parent="." unique_id=2012904365]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_vvh5c")
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerHUD" unique_id=648437417]
+layout_mode = 0
+offset_right = 1262.0
+offset_bottom = 653.0
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerHUD" unique_id=891348159]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 471.0
+offset_right = 872.0
+offset_bottom = 534.0
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Button2" type="Button" parent="MultiplayerHUD/HBoxContainer" unique_id=824567269]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87819016, 0.30675444, 0.35416895, 1)
+theme_override_font_sizes/font_size = 40
+text = "Create a room"
+
+[node name="Button" type="Button" parent="MultiplayerHUD/HBoxContainer" unique_id=1301775342]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20751467, 0.38910908, 0.9228366, 1)
+theme_override_font_sizes/font_size = 40
+text = "Join a room"
+
+[node name="TextureRect" type="TextureRect" parent="MultiplayerHUD" unique_id=2011455900]
+layout_mode = 0
+offset_left = 341.0
+offset_top = 144.0
+offset_right = 860.0
+offset_bottom = 398.0
+texture = SubResource("GradientTexture1D_pyidc")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=609396174]
+_spawnable_scenes = PackedStringArray("uid://bt7edhhacv13l")
+spawn_path = NodePath("../Players")
+spawn_limit = 60
+
+[node name="Players" type="Node2D" parent="." unique_id=387144232]
+
+[connection signal="pressed" from="MultiplayerHUD/HBoxContainer/Button2" to="MultiplayerHUD" method="become_host"]
+[connection signal="pressed" from="MultiplayerHUD/HBoxContainer/Button" to="MultiplayerHUD" method="join_room"]

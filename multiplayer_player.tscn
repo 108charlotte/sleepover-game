@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bt7edhhacv13l"]
+
+[ext_resource type="Script" uid="uid://edoyb7cpvsb7" path="res://scripts/multiplayer/multiplayer_player.gd" id="1_5ouof"]
+[ext_resource type="Texture2D" uid="uid://bftuhp1xe2kww" path="res://tiles/Characters/green_character.png" id="1_ti8do"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5ouof"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ti8do")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ti8do"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1898099362]
+script = ExtResource("1_5ouof")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1510116359]
+sprite_frames = SubResource("SpriteFrames_5ouof")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1653232095]
+scale = Vector2(4.4, 4.4)
+shape = SubResource("CircleShape2D_ti8do")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1906101551]
