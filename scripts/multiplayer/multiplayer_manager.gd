@@ -19,6 +19,8 @@ func become_host():
 	
 	multiplayer.peer_connected.connect(_add_player_to_game)
 	multiplayer.peer_disconnected.connect(_del_player)
+	
+	_add_player_to_game(1) # host always has id of 1
 
 func join_room(): 
 	print("Join room pressed")
@@ -27,15 +29,25 @@ func join_room():
 	client_peer.create_client(SERVER_IP, SERVER_PORT)
 	
 	multiplayer.multiplayer_peer = client_peer
+	_remove_single_player()
 
 func _add_player_to_game(id: int): 
-	print("Player %s joined the game" % id)
+	if not multiplayer.is_server():
+		return
+	print("_add_player_to_game called with id: %s, is_server: %s" % [id, multiplayer.is_server()])
 	
 	var player_to_add = multiplayer_scene.instantiate()
 	player_to_add.player_id = id
 	player_to_add.name = str(id)
 	
 	_players_spawn_node.add_child(player_to_add, true)
+	_remove_single_player()
 
 func _del_player(id: int): 
 	print("Player %s left the game" % id)
+
+func _remove_single_player():
+	print("Remove single Player")
+	var player_to_remove = get_tree().get_current_scene().get_node_or_null("Player")
+	if player_to_remove:
+		player_to_remove.queue_free()

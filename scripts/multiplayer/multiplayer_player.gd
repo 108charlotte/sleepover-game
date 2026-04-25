@@ -1,21 +1,30 @@
 extends CharacterBody2D
 
 const GRID_SIZE = 128  # Size of each grid cell in pixels
-const MOVE_SPEED = 0.01  # Seconds to tween between cells (lower = faster)
+const MOVE_SPEED = 0  # Seconds to tween between cells (lower = faster)
 
 @export var player_id := 1:
 	set(id):
 		player_id = id
+		set_multiplayer_authority(id)
 
 var _is_moving := false
 var _target_position := Vector2.ZERO
 
 func _ready() -> void:
+	player_id = int(name)
 	# Snap to grid on start
 	position = position.snapped(Vector2(GRID_SIZE, GRID_SIZE))
 	_target_position = position
+	print("My peer ID: %s | This player's ID: %s | Am I authority: %s" % [
+		multiplayer.get_unique_id(),
+		player_id,
+		is_multiplayer_authority()
+	])
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority():
+		return
 	if _is_moving:
 		return
 
