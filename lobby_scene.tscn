@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://bi7f6k2hdu7a4"]
+
+[ext_resource type="Script" path="res://LobbyScene.gd" id="1_ns5g5"]
+
+[sub_resource type="Gradient" id="Gradient_ajl2i"]
+offsets = PackedFloat32Array(0, 0.0055555557, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.90555555, 0.90555555, 0.90555555, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f7hjm"]
+gradient = SubResource("Gradient_ajl2i")
+
+[node name="LobbyScene" type="Control" unique_id=1738799618]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ns5g5")
+
+[node name="MultiplayerHUD" type="Control" parent="." unique_id=1678148151]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="MultiplayerHUD" unique_id=235874965]
+layout_mode = 0
+offset_right = 1262.0
+offset_bottom = 653.0
+color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="HBoxContainer" parent="MultiplayerHUD" unique_id=1743554064]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 471.0
+offset_right = 872.0
+offset_bottom = 534.0
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="HostButton" type="Button" parent="MultiplayerHUD/MainMenu" unique_id=789017247]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87819016, 0.30675444, 0.35416895, 1)
+theme_override_font_sizes/font_size = 40
+text = "Create a room"
+
+[node name="JoinButton" type="Button" parent="MultiplayerHUD/MainMenu" unique_id=1647336347]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20751467, 0.38910908, 0.9228366, 1)
+theme_override_font_sizes/font_size = 40
+text = "Join a room"
+
+[node name="NameField" type="TextEdit" parent="MultiplayerHUD/MainMenu" unique_id=1402142652]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MultiplayerHUD" unique_id=759301985]
+layout_mode = 0
+offset_left = 341.0
+offset_top = 144.0
+offset_right = 860.0
+offset_bottom = 398.0
+texture = SubResource("GradientTexture1D_f7hjm")
+
+[node name="Lobby" type="HBoxContainer" parent="MultiplayerHUD" unique_id=980808036]
+layout_mode = 0
+offset_right = 203.0
+offset_bottom = 40.0
+
+[node name="StartButton" type="Button" parent="MultiplayerHUD/Lobby" unique_id=612218961]
+layout_mode = 2
+text = "Start Game"
+
+[node name="LeaveButton" type="Button" parent="MultiplayerHUD/Lobby" unique_id=964534035]
+layout_mode = 2
+text = "Leave Room"
+
+[node name="PlayerList" type="ItemList" parent="MultiplayerHUD/Lobby" unique_id=1942265304]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="MultiplayerHUD/Lobby" unique_id=774250197]
+layout_mode = 2
+
+[node name="RoomBrowser" type="HBoxContainer" parent="MultiplayerHUD" unique_id=873487360]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ItemList" type="ItemList" parent="MultiplayerHUD/RoomBrowser" unique_id=413983798]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MultiplayerHUD/RoomBrowser" unique_id=529015576]
+layout_mode = 2
+text = "<"
+
+[node name="JoinSelectedButton" type="Button" parent="MultiplayerHUD/RoomBrowser" unique_id=1540371488]
+layout_mode = 2
+text = "Join"
+
+[node name="RefreshButton" type="Button" parent="MultiplayerHUD/RoomBrowser" unique_id=1086075641]
+layout_mode = 2
+
+[connection signal="pressed" from="MultiplayerHUD/MainMenu/HostButton" to="MultiplayerHUD" method="become_host"]
+[connection signal="pressed" from="MultiplayerHUD/MainMenu/JoinButton" to="MultiplayerHUD" method="join_room"]
