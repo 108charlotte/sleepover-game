@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b1wfakwo8cmf5"]
 
 [ext_resource type="PackedScene" uid="uid://7alj3l2ds1x2" path="res://map.tscn" id="1_pq8q7"]
-[ext_resource type="Script" uid="uid://dmisuj0c71rhg" path="res://rooms.gd" id="3_vvh5c"]
+[ext_resource type="Script" path="res://rooms.gd" id="3_vvh5c"]
 
 [sub_resource type="Gradient" id="Gradient_ajl2i"]
 offsets = PackedFloat32Array(0, 0.0055555557, 1)
